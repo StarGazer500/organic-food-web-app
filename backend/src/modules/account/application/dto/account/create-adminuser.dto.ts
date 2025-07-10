@@ -47,3 +47,35 @@ export class CreateAdminUserDto {
   @IsNumber({}, { each: true })
   roleIds?: number[];
 }
+
+
+export class LoginAdminDto {
+  @ApiProperty({ example: 'admin@example.com' })
+  @IsEmail()
+  email: string;
+
+ 
+  @ApiProperty({ example: 'securePassword123!' })
+  @IsString()
+  @MinLength(8)
+  @MaxLength(100)
+  password: string;
+
+
+  @ApiProperty({ example: 'admin!' })
+  @IsString()
+  @MinLength(8)
+  @MaxLength(100)
+  role: string;
+  
+}
+
+
+
+export interface JwtPayloadDto {
+  sub: string; // user id
+  email: string;
+  role:string;
+  iat?: number;
+  exp?: number;
+}

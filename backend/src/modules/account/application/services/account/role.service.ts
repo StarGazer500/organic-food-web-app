@@ -3,12 +3,17 @@ import { RoleRepository} from '../../../infrastructure/repository/roles.reposito
 import { Role} from '../../../domain/entities/account/role.entity';
 import { CreateRoleDto } from '../../dto/account/create-role.dto';
 
+
 @Injectable()
 export class AdminRoleService {
 constructor(private readonly roleRepository: RoleRepository) {}
-  async create(createRoleDto: CreateRoleDto): Promise<Role> {
+  async createRole(createRoleDto: CreateRoleDto): Promise<Role> {
+        
+    
     return await this.roleRepository.create(createRoleDto);
   }
+
+ 
 
   async findAll(): Promise<Role[]> {
     return await this.roleRepository.findAll();

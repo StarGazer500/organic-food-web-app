@@ -1,28 +1,33 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {AccountModule} from './modules/account/account.module'
-import {AdminUser} from './modules/account/domain/entities/account/adminusers.entity'
-import {Role} from './modules/account/domain/entities/account/role.entity'
-import {NormalUser} from './modules/account/domain/entities/account/normalusers.entity'
-
+import { AccountModule } from './modules/account/account.module';
+import { AdminUser } from './modules/account/domain/entities/account/adminusers.entity';
+import { Role } from './modules/account/domain/entities/account/role.entity';
+import { NormalUser } from './modules/account/domain/entities/account/normalusers.entity';
+import { JwtauthModule } from './common/jwtauth/jwtauth.module';
+// import { AdminVerifyController } from './modules/account/presentation/controllers/account/admin/admin.controller';
 
 @Module({
   imports: [
-     TypeOrmModule.forRoot({
+    AccountModule,
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST,
+      host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT || '5432'),
       username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
+      password: String(process.env.DB_PASSWORD || ''), // Ensure it's a string
       database: process.env.DB_NAME,
-      entities: [AdminUser,Role,NormalUser],
+      entities: [AdminUser, Role, NormalUser], // Explicitly list entities
       synchronize: false, // Always false in production
-      migrations: ['dist/migrations/*.js'],
-      migrationsRun: true, // Automatically run migrations on startup
+      autoLoadEntities: true,
+      logging: true,
     }),
-    AccountModule
+   
+    JwtauthModule
   ],
   controllers: [AppController],
   providers: [AppService],

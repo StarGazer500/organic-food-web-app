@@ -2,34 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOptionsWhere } from 'typeorm';
 import { NormalUser } from '../../domain/entities/account/normalusers.entity';
-import { CreateUserDto } from '../../application/dto/account/create-adminuser.dto';
+import { CreateNormalUserDto } from '../../application/dto/account/create-normaluser.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UserRepository {
+export class NormalUserRepository {
   constructor(
     @InjectRepository(NormalUser)
-    private readonly userRepository: Repository<NormalUser>,
+    private readonly normalUserRepository: Repository<NormalUser>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<NormalUser> {
-    const user = this.userRepository.create(createUserDto);
-    return await this.userRepository.save(user);
+  async create(createUserDto:  CreateNormalUserDto): Promise<NormalUser> {
+    const user = this.normalUserRepository.create(createUserDto);
+    return await this.normalUserRepository.save(user);
   }
 
   async findAll(): Promise<NormalUser[]> {
-    return await this.userRepository.find();
+    return await this.normalUserRepository.find();
   }
 
   async findOne(id: number): Promise<any> {
-    return await this.userRepository.findOne({
+    return await this.normalUserRepository.findOne({
       where: { id },
       
     });
   }
 
   async findByEmail(email: string): Promise<any> {
-    return await this.userRepository.findOne({
+    return await this.normalUserRepository.findOne({
       where: { email },
     });
   }
@@ -37,21 +37,16 @@ export class UserRepository {
 
 
   async remove(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+    await this.normalUserRepository.delete(id);
   }
 
   async findActiveUsers(): Promise<NormalUser[]> {
-    return await this.userRepository.find({
+    return await this.normalUserRepository.find({
       where: { isActive: true },
     });
   }
 
-  async findUsersByAge(minAge: number, maxAge: number): Promise<User[]> {
-    return await this.userRepository
-      .createQueryBuilder('user')
-      .where('user.age BETWEEN :minAge AND :maxAge', { minAge, maxAge })
-      .getMany();
-  }
+
 
   
 }

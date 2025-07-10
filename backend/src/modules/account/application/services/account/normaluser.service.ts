@@ -1,11 +1,11 @@
 import { Injectable,NotFoundException } from '@nestjs/common';
-import { UserRepository } from '../../../infrastructure/repository/normalusers.repository';
+import { NormalUserRepository } from '../../../infrastructure/repository/normalusers.repository';
 import { NormalUser} from '../../../domain/entities/account/normalusers.entity';
 import { CreateNormalUserDto} from '../../dto/account/create-normaluser.dto';
 
 @Injectable()
 export class NormalUserAccountService {
-constructor(private readonly userRepository: UserRepository) {}
+constructor(private readonly userRepository: NormalUserRepository) {}
   async create(createUserDto: CreateNormalUserDto): Promise<NormalUser> {
     return await this.userRepository.create(createUserDto);
   }
