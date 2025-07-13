@@ -72,7 +72,7 @@ export class LoginAdminDto {
 
 
 
-export interface JwtPayloadDto {
+export interface JwtAdminPayloadDto {
   sub: string; // user id
   email: string;
   role:string;

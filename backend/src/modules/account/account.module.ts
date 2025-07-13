@@ -11,13 +11,16 @@ import { Role } from './domain/entities/account/role.entity';
 import { NormalUser } from './domain/entities/account/normalusers.entity';
 import { AdminUserRepository } from './infrastructure/repository/adminusers.repository';
 import {RoleRepository} from './infrastructure/repository/roles.repository'
+import { NormaluserAuthController } from './presentation/controllers/account/normaluser/normaluser.controller';
+import {NormalUserRepository} from './infrastructure/repository/normalusers.repository'
+import {NormalUserAccountService} from './application/services/account/normaluser.service'
 
 @Module({
   imports: [
     JwtauthModule,
-    TypeOrmModule.forFeature([AdminUser, Role]) // 👈 register repositories
+    TypeOrmModule.forFeature([AdminUser, Role,NormalUser]) // 👈 register repositories
   ],
-  controllers: [AdminAuthController, RolesController],
-  providers: [AdminAccountService,AdminRoleService, AdminUserRepository,RoleRepository], // 👈 add repository provider
+  controllers: [AdminAuthController, RolesController, NormaluserAuthController],
+  providers: [AdminAccountService,AdminRoleService, AdminUserRepository,RoleRepository,NormalUserAccountService,NormalUserRepository], // 👈 add repository provider
 })
 export class AccountModule {}

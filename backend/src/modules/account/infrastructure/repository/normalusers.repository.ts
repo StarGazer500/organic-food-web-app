@@ -34,6 +34,12 @@ export class NormalUserRepository {
     });
   }
 
+  async findByPassword(password: string): Promise<any> {
+    return await this.normalUserRepository.findOne({
+      where: { password },
+    });
+  }
+
 
 
   async remove(id: number): Promise<void> {

@@ -43,3 +43,23 @@ export class CreateNormalUserDto {
 
   
 }
+
+export interface JwtNormalUserPayloadDto {
+  sub: string; // user id
+  email: string;
+  iat?: number;
+  exp?: number;
+}
+
+export class LoginNormalUserDto {
+  @ApiProperty({ example: 'admin@example.com' })
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({ example: 'securePassword123!' })
+  @IsString()
+  @MinLength(8)
+  @MaxLength(100)
+  password: string;
+  
+}

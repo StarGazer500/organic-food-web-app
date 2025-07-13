@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtSignService,JwtStrategy } from './jwtauth.service';
-import {AdminGuard} from './admin-guard.guard'
+import { JwtSignService,JwtAdminStrategy,JwtNormalUserStrategy } from './jwtauth.service';
+import {SuperUserAdminGuard} from './admin-guard.guard'
 
 
 @Module({
@@ -16,7 +16,7 @@ import {AdminGuard} from './admin-guard.guard'
     }),
   ],
   
-  providers: [JwtSignService,JwtStrategy,AdminGuard],
-  exports:[JwtSignService,JwtStrategy,AdminGuard]
+  providers: [JwtSignService,JwtAdminStrategy,JwtNormalUserStrategy,SuperUserAdminGuard],
+  exports:[JwtSignService,JwtAdminStrategy,JwtNormalUserStrategy,SuperUserAdminGuard]
 })
 export class JwtauthModule {}

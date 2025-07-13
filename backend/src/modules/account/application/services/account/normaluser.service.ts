@@ -1,13 +1,69 @@
-import { Injectable,NotFoundException } from '@nestjs/common';
+import { Injectable,NotFoundException,Logger } from '@nestjs/common';
 import { NormalUserRepository } from '../../../infrastructure/repository/normalusers.repository';
 import { NormalUser} from '../../../domain/entities/account/normalusers.entity';
-import { CreateNormalUserDto} from '../../dto/account/create-normaluser.dto';
+import { CreateNormalUserDto,LoginNormalUserDto,JwtNormalUserPayloadDto} from '../../dto/account/create-normaluser.dto';
+import {JwtSignService} from '../../../../../common/jwtauth/jwtauth.service'
+import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
 
 @Injectable()
 export class NormalUserAccountService {
-constructor(private readonly userRepository: NormalUserRepository) {}
+private readonly logger = new Logger(NormalUserAccountService.name)  
+constructor(
+  private readonly userRepository: NormalUserRepository,
+private jwtsignService: JwtSignService
+) {}
   async create(createUserDto: CreateNormalUserDto): Promise<NormalUser> {
-    return await this.userRepository.create(createUserDto);
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const userToCreate = {
+      ...createUserDto,
+      password: hashedPassword,
+    };
+    return await this.userRepository.create(userToCreate);
+  }
+
+  async login(loginDto: LoginNormalUserDto, response: Response): Promise<object> {
+    const user = await this.userRepository.findByEmail(loginDto.email);
+    
+    if (!user) {
+      throw new NotFoundException('Invalid email or password');
+    }
+  
+    const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
+    if (!isPasswordValid) {
+      throw new NotFoundException('Invalid email or password');
+    }
+  
+   
+  
+    const payload: JwtNormalUserPayloadDto = {
+      email: user.email,
+      sub: user.id,
+    };
+  
+    const access_token = await this.jwtsignService.signNormalUserJwt(payload);
+    
+    // Set HTTP-only cookie instead of returning token
+    response.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only over HTTPS in production
+      sameSite: 'strict',
+      maxAge: 3600000, // 1 hour
+    });
+  
+    if (access_token) {
+      this.logger.log(JSON.stringify(access_token))
+    } else {
+      this.logger.log("user is not valid");
+    }
+  
+    return {
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        email: user.email,
+      },
+    };
   }
 
   async findAll(): Promise<NormalUser[]> {

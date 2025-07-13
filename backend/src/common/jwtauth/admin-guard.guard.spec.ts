@@ -1,7 +1,7 @@
-import { AdminGuardGuard } from '../jwtauth/admin-guard.guard';
+import { SuperUserAdminGuardGuard } from '../jwtauth/admin-guard.guard';
 
-describe('AdminGuardGuard', () => {
+describe('SuperUserAdminGuardGuard', () => {
   it('should be defined', () => {
-    expect(new AdminGuardGuard()).toBeDefined();
+    expect(new SuperUserAdminGuardGuard()).toBeDefined();
   });
 });
