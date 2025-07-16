@@ -5,6 +5,7 @@ import './App.css'
 import {CreateAdminAccount,AdminLogin} from './account/admin/Auth'
 import {CreateAdminRole} from './account/admin/Role'
 import {CreateNormalUserAccount,NormauserLogin} from './account/notadmin/Auth'
+import {CreateProduct} from './product/CreateProducts'
 
 import { Route, Routes } from "react-router-dom";
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/admin-login" element={<AdminLogin/>} /> 
             <Route path="/create-account" element={<CreateNormalUserAccount/>} /> 
             <Route path="/login" element={<NormauserLogin/>} /> 
+            <Route path="/create-product" element={<CreateProduct/>} /> 
             
                 
         </Routes>

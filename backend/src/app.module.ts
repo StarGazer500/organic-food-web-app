@@ -7,8 +7,13 @@ import { AccountModule } from './modules/account/account.module';
 import { AdminUser } from './modules/account/domain/entities/account/adminusers.entity';
 import { Role } from './modules/account/domain/entities/account/role.entity';
 import { NormalUser } from './modules/account/domain/entities/account/normalusers.entity';
+import {Product} from './modules/products/domain/entity/product.entity'
 import { JwtauthModule } from './common/jwtauth/jwtauth.module';
-// import { AdminVerifyController } from './modules/account/presentation/controllers/account/admin/admin.controller';
+import { ProductModuleModule } from './modules/products/product.module.module';
+
+
+
+
 
 @Module({
   imports: [
@@ -21,13 +26,14 @@ import { JwtauthModule } from './common/jwtauth/jwtauth.module';
       username: process.env.DB_USERNAME,
       password: String(process.env.DB_PASSWORD || ''), // Ensure it's a string
       database: process.env.DB_NAME,
-      entities: [AdminUser, Role, NormalUser], // Explicitly list entities
+      entities: [AdminUser, Role, NormalUser,Product], // Explicitly list entities
       synchronize: false, // Always false in production
       autoLoadEntities: true,
       logging: true,
     }),
-   
-    JwtauthModule
+    JwtauthModule,
+    ProductModuleModule,
+    ProductModuleModule
   ],
   controllers: [AppController],
   providers: [AppService],
