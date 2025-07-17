@@ -47,7 +47,7 @@ export class ProductController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('get-all-product')
+  @Get('get-all-products')
   async getAllProduct() {
     return this.productService.findAll();
   }
