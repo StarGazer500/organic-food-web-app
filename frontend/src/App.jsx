@@ -7,6 +7,7 @@ import {CreateAdminRole} from './account/admin/Role'
 import {CreateNormalUserAccount,NormauserLogin} from './account/notadmin/Auth'
 import {CreateProduct} from './product/CreateProducts'
 import {GetAllProduct} from './product/GetAllProducts'
+import {ProductDetail} from './product/GetDetailPage'
 
 import { Route, Routes } from "react-router-dom";
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/login" element={<NormauserLogin/>} /> 
             <Route path="/create-product" element={<CreateProduct/>} /> 
             <Route path="/get-all-product" element={<GetAllProduct/>} /> 
+            <Route path="/product/:id" element={<ProductDetail />} />
             
                 
         </Routes>

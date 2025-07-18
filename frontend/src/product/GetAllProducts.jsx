@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function GetAllProduct() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -38,6 +40,10 @@ export function GetAllProduct() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
   };
 
   useEffect(() => {
@@ -87,7 +93,11 @@ export function GetAllProduct() {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+          <div 
+            key={product.id} 
+            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+            onClick={() => handleProductClick(product.id)}
+          >
             <div className="aspect-square bg-gray-200 relative">
               <img
                 src={`http://localhost:3000${product.imageUrl}`}
@@ -105,7 +115,13 @@ export function GetAllProduct() {
               
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-bold text-green-600">${product.price}</span>
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm transition-colors duration-200">
+                <button 
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md text-sm transition-colors duration-200"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent triggering the card click
+                    // Add to cart logic here
+                  }}
+                >
                   Add to Cart
                 </button>
               </div>

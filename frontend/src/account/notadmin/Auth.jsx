@@ -204,7 +204,7 @@ const navigate = useNavigate()
       }
 
       const data = await response.json();
-    //   navigate('/create-admin-account')
+      navigate('/get-all-product')
       console.log('Success:', data,data.access_token);
       setError(''); // Clear any previous errors
       

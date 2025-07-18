@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Req, Post, Body, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, Post, Body, Res, UseInterceptors, UploadedFile, Param, ParseIntPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -11,7 +11,7 @@ import { SuperUserAdminGuard } from 'src/common/jwtauth/admin-guard.guard';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @UseGuards(AuthGuard('jwt'),SuperUserAdminGuard)
+  @UseGuards(AuthGuard('jwt'), SuperUserAdminGuard)
   @Post('create-product')
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
@@ -42,7 +42,6 @@ export class ProductController {
       price: Number(createDto.price), // Convert string to number
       imageUrl: file ? `/uploads/${file.filename}` : undefined, // Changed from null to undefined
     };
-
     return this.productService.create(productData);
   }
 
@@ -50,5 +49,11 @@ export class ProductController {
   @Get('get-all-products')
   async getAllProduct() {
     return this.productService.findAll();
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('get-product/:id')
+  async getProductById(@Param('id', ParseIntPipe) id: number) {
+    return this.productService.findOne(id);
   }
 }
